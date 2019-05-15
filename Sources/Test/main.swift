@@ -1,6 +1,5 @@
 import Kitura
-import LoggerAPI
-import HeliumLogger
+//import LoggerAPI
 import Logging
 
 public struct Fruit: Codable {
@@ -10,15 +9,15 @@ public struct Fruit: Codable {
     }
 }
 
-func testLogging() {
-    Log.error("Error")
-    Log.warning("Warning")
-    Log.info("Info")
-    Log.verbose("Verbose")
-    Log.debug("Debug")
-    Log.exit("Exit")
-    Log.entry("Entry")
-}
+//func testLogging() {
+//    Log.error("Error")
+//    Log.warning("Warning")
+//    Log.info("Info")
+//    Log.verbose("Verbose")
+//    Log.debug("Debug")
+//    Log.exit("Exit")
+//    Log.entry("Entry")
+//}
 
 // Kitura example
 func testLoggingWithKitura() {
@@ -33,24 +32,16 @@ func testLoggingWithKitura() {
     Kitura.stop()
 }
 
-// Option A: Configure a default swift-log logger
-//
-Log.swiftLogger?.logLevel = .trace
+// Configure your application's logger
+var mySwiftLogger = Logging.Logger(label: "com.dj.MyLogger")
+mySwiftLogger.logLevel = .trace
 
-// Option B: Initialize a Swift Logger and attach it to LoggerAPI
-//
-//var mySwiftLogger = Logging.Logger(label: "com.dj.MyLogger")
-//mySwiftLogger.logLevel = .trace
+// Configure via Kitura, rather than LoggerAPI directly
+// (avoids the need to depend on / import LoggerAPI)
 //Log.swiftLogger = mySwiftLogger
+Kitura.logTo(mySwiftLogger)
 
-// Option C: Configure HeliumLogger
-// (if LoggerAPI has a default logger also, you must also set it to nil)
-//
-Log.logger = HeliumLogger(.entry)
-Log.swiftLogger = nil
-
-print("========= LoggerAPI log messages ==========")
-testLogging()
-//print("\n========= Kitura log messages =========")
-//testLoggingWithKitura()
-
+//print("========= LoggerAPI log messages ==========")
+//testLogging()
+print("\n========= Kitura log messages =========")
+testLoggingWithKitura()
